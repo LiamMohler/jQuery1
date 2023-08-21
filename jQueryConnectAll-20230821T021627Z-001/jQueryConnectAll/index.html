@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>First Form Ex</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+    <body>
+        <h1 style="font-weight: bold;">A Basic Form</h1>
+        <hr>
+        <form action = "#">
+            <fieldset>
+                <legend>Student Information</legend>
+                <fieldset>
+                    <legend>General</legend>
+                <div>
+                    <label for = "username">Name:</label>
+                    <input id = "username" type = "text" name = "username">
+
+                    <label for="grade">Grade:</label>
+                    <input id = "grade" type="number" min="9" max="12" value = "10">
+                </div>
+            </fieldset>
+                <input type = "reset" name = "reset" value = "Clear Form">
+                <input type = "submit" name = "send" value = "Send Form">
+            </fieldset>
+            <br>
+            <div id ="error"></div>
+            <br>
+            <table border ="1" id = "table">
+                <tr>
+                    <th>Name</th>
+                    <th>Grade</th>
+                </tr>
+            </table>
+            <input type = "button" name = "clearTabel" value = "Clear Table" onclick="clearTableClick()">
+            <input type = "button" name = "fillForm" value = "Fill Form" onclick="fillTableClick()">
+            <input type="number" min="1" value = "1" id = "tableIndex">
+        </form>
+        <script type="text/javascript">
+            $(document).ready(function()
+            {
+                $("form").submit(function(event)
+                {
+                    let error = false;
+                    $("#table tr").each(function() 
+                    {
+                        if ($(this).find("td:eq(0)").text() == $("#username").val())
+                            error = true;
+                    });
+
+                    if ($("#username").val() == "") {
+                        $("#error").html("A Name Must Be Entered");
+                        return false;
+                    }
+                    else if (error) {
+                        $("#error").html("Name Already Entered");
+                        return false;
+                    }
+                    else if ($("#grade").val() < 9 || $("#grade").val() > 13) {
+                        $("#error").html("A Valid Grade Must Be Entered");
+                        return false;
+                    }
+                    else
+                    {
+                        $("#error").html("");
+                    }
+
+                    $("#table").append("<tr class='tr1'><td>" + $("#username").val()
+                    +"</td>" + "<td>" + $("#grade").val() +"</td>");
+                    return false;
+                });
+            });
+            function fillTableClick(){
+                if($("#tableIndex").val() <= $("#table tr").length-1 && $("#tableIndex").val() != 0){
+                    /*$("#table tr").each(function(index, element){
+                        //console.dir(this);
+                        if(index == $("#tableIndex").val()){
+                            $("#username").val(element.childNodes[0].innerText);
+                            $("#grade").val(element.childNodes[1].innerText);
+                        }
+                        index++;
+                    });*/
+                    /*let index = 0;
+                    $("#table tr").each(function(){
+                        if(index == $("#tableIndex").val()){
+                            $("#username").val(this.children[0].innerText);
+                            $("#grade").val(this.children[1].innerText);
+                        }
+                        index++;
+                    });*/
+                    let index = 0;
+                    $("#table tr").each(function(){
+                        if(index == $("#tableIndex").val()){
+                            $("#username").val($(this).find("td:eq(0)").text());
+                            $("#grade").val($(this).find("td:eq(1)").text());
+                        }
+                        index++;
+                    });
+                }
+            }
+            function clearTableClick(){
+                $(".tr1").remove();
+            }
+
+        </script>
+    </body>
+</html>
